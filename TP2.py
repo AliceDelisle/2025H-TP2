@@ -3,7 +3,7 @@ TP2 : Gestion d'une base de données d'un hôpital
 
 Groupe de laboratoire : XX
 Numéro d'équipe :  YY
-Noms et matricules : Nom1 (Matricule1), Nom2 (Matricule2)
+Noms et matricules : Nom1 (Matricule1), Alice Delisle (2436614)
 """
 
 import csv
