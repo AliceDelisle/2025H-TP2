@@ -69,18 +69,21 @@ def load_multiple_csv(csv_path1, csv_path2):
     patients_dict = {}
 
     # TODO : Écrire votre code ici
-    with open(csv_path1,csv_path2, newline='') as csv_file:
-        csv_reader = csv.DictReader(csv_path1,csv_path2)
-        for row in csv_reader : 
-            patient_id = row['participant_id']
-            patients_dict[patient_id] = {
-                'sex': row['sex'],
-                'age': row['age'],
-                'height': row['height'],
-                'weight': row['weight'],
-                'date_of-scan': row['date_of_scan'], 
-                'pathology': row['pathology']
-            }
+    cvs_paths = [csv_path1, csv_path2]
+    for csv_path in cvs_paths:
+
+         with open(csv_path, newline='') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            for row in csv_reader : 
+                patient_id = row['participant_id']
+                patients_dict[patient_id] = {
+                    'sex': row['sex'],
+                    'age': row['age'],
+                    'height': row['height'],
+                    'weight': row['weight'],
+                    'date_of-scan': row['date_of_scan'], 
+                    'pathology': row['pathology']
+                }
 
     # Fin du code
 
@@ -108,8 +111,22 @@ def update_convention(old_convention_dict):
     new_convention_dict = {}
 
     # TODO : Écrire votre code ici
+<<<<<<< HEAD
     
 
+=======
+    for patient_id, patient_dict in old_convention_dict.items():
+        new_patient_dict = {}
+        for key, value in patient_dict.items():
+            if value =='n/a':
+                new_value = None
+            elif key == 'date_of_scan'and value != 'n/a':
+                new_value = value.replace('-', '/')
+            else:
+                new_value = value
+            new_patient_dict[key] = new_value
+        new_convention_dict[patient_id] = new_patient_dict
+>>>>>>> 924a5de396a68a17bb8703376115f7f9e210cc6a
     # Fin du code
 
     return new_convention_dict
@@ -234,7 +251,7 @@ if __name__ == '__main__':
     patients_dict_multi = load_multiple_csv(csv_path1=csv_path1, csv_path2=csv_path2)
 
     # Affichage du résultat
-    print("Partie 2: \n\n", patients_dict_multi, "\n")
+    print("Partie 2: \n\n", patients_dict['sub-tokyoIngenia04'], "\n")
 
     ######################
     # Tester la partie 3 #
@@ -244,7 +261,7 @@ if __name__ == '__main__':
     new_patients_dict = update_convention(patients_dict)
 
     # Affichage du résultat
-    print("Partie 3: \n\n", patients_dict, "\n")
+    print("Partie 3: \n\n", new_patients_dict['sub-tokyoIngenia04'], "\n")
 
     ######################
     # Tester la partie 4 #
