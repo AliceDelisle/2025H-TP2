@@ -108,7 +108,7 @@ def update_convention(old_convention_dict):
     new_convention_dict = {}
 
     # TODO : Écrire votre code ici
-
+    
 
     # Fin du code
 
