@@ -32,8 +32,8 @@ def load_csv(csv_path):
 
 
     # Fin du code
-
     return patients_dict
+   
 
 ########################################################################################################## 
 # PARTIE 2 : Fusion des données (3 points)
