@@ -27,12 +27,21 @@ def load_csv(csv_path):
         Dictionnaire composé des informations contenues dans le fichier csv
     """
     patients_dict = {}
-
     # TODO : Écrire votre code ici
-
+    with open(csv_path, newline='') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader : 
+            patient_id = row['participant_id']
+            patients_dict[patient_id] = {
+                'sex': row['sex'],
+                'age': row['age'],
+                'height': row['height'],
+                'weight': row['weight'],
+                'date_of-scan': row['date_of_scan'], 
+                'pathology': row['pathology']
+            }
 
     # Fin du code
-
     return patients_dict
 
 ########################################################################################################## 
@@ -59,7 +68,18 @@ def load_multiple_csv(csv_path1, csv_path2):
     patients_dict = {}
 
     # TODO : Écrire votre code ici
-
+    with open(csv_path1,csv_path2, newline='') as csv_file:
+        csv_reader = csv.DictReader(csv_path1,csv_path2)
+        for row in csv_reader : 
+            patient_id = row['participant_id']
+            patients_dict[patient_id] = {
+                'sex': row['sex'],
+                'age': row['age'],
+                'height': row['height'],
+                'weight': row['weight'],
+                'date_of-scan': row['date_of_scan'], 
+                'pathology': row['pathology']
+            }
 
     # Fin du code
 
@@ -199,7 +219,7 @@ if __name__ == '__main__':
     patients_dict = load_csv(csv_path)
 
     # Affichage du résultat
-    print("Partie 1: \n\n", patients_dict, "\n")
+    print("Partie 1: \n\n",patients_dict['sub-tokyoIngenia04'], "\n")
 
     ######################
     # Tester la partie 2 #
