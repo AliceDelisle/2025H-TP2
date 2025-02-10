@@ -111,10 +111,6 @@ def update_convention(old_convention_dict):
     new_convention_dict = {}
 
     # TODO : Écrire votre code ici
-<<<<<<< HEAD
-    
-
-=======
     for patient_id, patient_dict in old_convention_dict.items():
         new_patient_dict = {}
         for key, value in patient_dict.items():
@@ -126,7 +122,6 @@ def update_convention(old_convention_dict):
                 new_value = value
             new_patient_dict[key] = new_value
         new_convention_dict[patient_id] = new_patient_dict
->>>>>>> 924a5de396a68a17bb8703376115f7f9e210cc6a
     # Fin du code
 
     return new_convention_dict
