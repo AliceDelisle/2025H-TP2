@@ -188,8 +188,47 @@ def fetch_statistics(patients_dict):
     metrics = {'M':{}, 'F':{}}
 
     # TODO : Écrire votre code ici
-
-
+    #initialisation des listes
+    males_age =[]
+    males_height =[]
+    males_weight = []
+    females_age = []
+    females_height = []
+    females_weight = []
+    # Collleste des données par sexe
+    for patient_id in patients_dict: 
+        patient = patients_dict[patient_id]
+        if patient['sex'] == 'M':
+            males_age.append(patients_dict['age'])
+            if patient['height'] != 'n/a':
+                males_height.append(patients_dict['height'])
+                if patient['weight'] != 'n/a':
+                    males_weight.append(patients_dict['weight'])
+        else: 
+            females_age.append(patients_dict['age'])
+            if patient['height'] != 'n/a':
+                females_height.append(patients_dict['height'])
+                if patient['weight'] != 'n/a':
+                    females_weight.append(patients_dict['weight'])
+    # Calcul des moyennes et écart-types pour les hommes
+    metrics['M']['age'] = {'mean': sum(males_age)/len(males_age),
+                            'std': (sum([(x - sum(males_age)/len(males_age))**2 for x in males_age])/len(males_age))**0.5} 
+    
+    metrics['M']['height'] = {'mean': sum(males_height)/len(males_height),
+                            'std': (sum([(x - sum(males_height)/len(males_height))**2 for x in males_height])/len(males_height))**0.5} 
+    
+    metrics['M']['weight'] = {'mean': sum(males_weight)/len(males_weight),
+                            'std': (sum([(x - sum(males_weight)/len(males_weight))**2 for x in males_weight])/len(males_weight))**0.5} 
+    
+    # Calcul des moyennes et écart-types pour les femmes
+    metrics['F']['age'] = {'mean': sum(females_age)/len(females_age),
+                            'std': (sum([(x - sum(females_age)/len(females_age))**2 for x in females_age])/len(females_age))**0.5} 
+    
+    metrics['F']['height'] = {'mean': sum(females_height)/len(females_height),
+                            'std': (sum([(x - sum(females_height)/len(females_height))**2 for x in females_height])/len(females_height))**0.5} 
+    
+    metrics['F']['weight'] = {'mean': sum(females_weight)/len(females_weight),
+                            'std': (sum([(x - sum(females_weight)/len(females_weight))**2 for x in females_weight])/len(females_weight))**0.5}        
     # Fin du code
 
     return metrics
