@@ -150,7 +150,13 @@ def fetch_candidates(patients_dict):
     candidates_list = []
 
     # TODO : Écrire votre code ici
-
+    for participant_id in patients_dict:
+        if patients_dict[participant_id]['sex']=='F' and\
+            patients_dict[participant_id]['age'] >= '25' and \
+            patients_dict[participant_id]['age'] <= '32' and \
+            patients_dict[participant_id]['height'] != 'n/a' and \
+            patients_dict[participant_id]['height'] > '170':
+            candidates_list.append(participant_id)
 
     # Fin du code
 
@@ -263,10 +269,10 @@ if __name__ == '__main__':
     ######################
 
     # Utilisation de la fonction
-    patients_list = fetch_candidates(patients_dict)
+    candicates_list = fetch_candidates(patients_dict)
 
     # Affichage du résultat
-    print("Partie 4: \n\n", patients_list, "\n")
+    print("Partie 4: \n\n", candicates_list, "\n")
 
     ######################
     # Tester la partie 5 #
