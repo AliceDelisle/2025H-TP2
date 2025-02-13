@@ -1,8 +1,8 @@
 """
 TP2 : Gestion d'une base de données d'un hôpital
 
-Groupe de laboratoire : XX
-Numéro d'équipe :  YY
+Groupe de laboratoire : 02
+Numéro d'équipe :  10
 Noms et matricules : Charlorin kateleen (2437457), Alice Delisle (2436614)
 """
 
@@ -118,9 +118,8 @@ def update_convention(old_convention_dict):
                 new_value = None
             elif key == 'date_of_scan'and value != 'n/a':
                 new_value = value.replace('-', '/')
-            else:
-                new_value = value
-            new_patient_dict[key] = new_value
+           
+            new_patient_dict[key] = value
         new_convention_dict[patient_id] = new_patient_dict
     # Fin du code
 
@@ -199,36 +198,36 @@ def fetch_statistics(patients_dict):
     for patient_id in patients_dict: 
         patient = patients_dict[patient_id]
         if patient['sex'] == 'M':
-            males_age.append(patients_dict['age'])
+            males_age.append(float(patient['age']))
             if patient['height'] != 'n/a':
-                males_height.append(patients_dict['height'])
+                males_height.append(float(patient['height']))
                 if patient['weight'] != 'n/a':
-                    males_weight.append(patients_dict['weight'])
+                    males_weight.append(float(patient['weight']))
         else: 
-            females_age.append(patients_dict['age'])
+            females_age.append(float(patient['age']))
             if patient['height'] != 'n/a':
-                females_height.append(patients_dict['height'])
+                females_height.append(float(patient['height']))
                 if patient['weight'] != 'n/a':
-                    females_weight.append(patients_dict['weight'])
+                    females_weight.append(float(patient['weight']))
     # Calcul des moyennes et écart-types pour les hommes
-    metrics['M']['age'] = {'mean': sum(males_age)/len(males_age),
-                            'std': (sum([(x - sum(males_age)/len(males_age))**2 for x in males_age])/len(males_age))**0.5} 
+    metrics['M']['age'] = {'mean': round(sum(males_age)/len(males_age), 2),
+                            'std': round((sum([(x - sum(males_age)/len(males_age))**2 for x in males_age])/len(males_age))**0.5, 2)} 
     
-    metrics['M']['height'] = {'mean': sum(males_height)/len(males_height),
-                            'std': (sum([(x - sum(males_height)/len(males_height))**2 for x in males_height])/len(males_height))**0.5} 
+    metrics['M']['height'] = {'mean': round(sum(males_height)/len(males_height), 2),
+                            'std': round((sum([(x - sum(males_height)/len(males_height))**2 for x in males_height])/len(males_height))**0.5, 2)} 
     
-    metrics['M']['weight'] = {'mean': sum(males_weight)/len(males_weight),
-                            'std': (sum([(x - sum(males_weight)/len(males_weight))**2 for x in males_weight])/len(males_weight))**0.5} 
+    metrics['M']['weight'] = {'mean': round(sum(males_weight)/len(males_weight), 2),
+                            'std': round((sum([(x - sum(males_weight)/len(males_weight))**2 for x in males_weight])/len(males_weight))**0.5, 2)} 
     
     # Calcul des moyennes et écart-types pour les femmes
-    metrics['F']['age'] = {'mean': sum(females_age)/len(females_age),
-                            'std': (sum([(x - sum(females_age)/len(females_age))**2 for x in females_age])/len(females_age))**0.5} 
+    metrics['F']['age'] = {'mean': round(sum(females_age)/len(females_age), 2),
+                            'std': round((sum([(x - sum(females_age)/len(females_age))**2 for x in females_age])/len(females_age))**0.5, 2)} 
     
-    metrics['F']['height'] = {'mean': sum(females_height)/len(females_height),
-                            'std': (sum([(x - sum(females_height)/len(females_height))**2 for x in females_height])/len(females_height))**0.5} 
+    metrics['F']['height'] = {'mean': round(sum(females_height)/len(females_height), 2),
+                            'std': round((sum([(x - sum(females_height)/len(females_height))**2 for x in females_height])/len(females_height))**0.5, 2)} 
     
-    metrics['F']['weight'] = {'mean': sum(females_weight)/len(females_weight),
-                            'std': (sum([(x - sum(females_weight)/len(females_weight))**2 for x in females_weight])/len(females_weight))**0.5}        
+    metrics['F']['weight'] = {'mean': round(sum(females_weight)/len(females_weight), 2),
+                            'std': round((sum([(x - sum(females_weight)/len(females_weight))**2 for x in females_weight])/len(females_weight))**0.5, 2)}        
     # Fin du code
 
     return metrics
