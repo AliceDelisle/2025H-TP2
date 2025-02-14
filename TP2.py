@@ -1,8 +1,8 @@
 """
 TP2 : Gestion d'une base de données d'un hôpital
 
-Groupe de laboratoire : XX
-Numéro d'équipe :  YY
+Groupe de laboratoire : 02
+Numéro d'équipe :  10
 Noms et matricules : Charlorin kateleen (2437457), Alice Delisle (2436614)
 """
 
@@ -37,11 +37,12 @@ def load_csv(csv_path):
                 'age': row['age'],
                 'height': row['height'],
                 'weight': row['weight'],
-                'date_of-scan': row['date_of_scan'], 
+                'date_of_scan': row['date_of_scan'], 
                 'pathology': row['pathology']
             }
 
     # Fin du code
+
     return patients_dict
    
 
@@ -69,21 +70,21 @@ def load_multiple_csv(csv_path1, csv_path2):
     patients_dict = {}
 
     # TODO : Écrire votre code ici
-    cvs_paths = [csv_path1, csv_path2]
-    for csv_path in cvs_paths:
-
-         with open(csv_path, newline='') as csv_file:
+    csv_paths = [csv_path1, csv_path2]
+    for csv_path in csv_paths:
+        with open(csv_path, newline='') as csv_file:
             csv_reader = csv.DictReader(csv_file)
-            for row in csv_reader : 
+            for row in csv_reader:
                 patient_id = row['participant_id']
-                patients_dict[patient_id] = {
-                    'sex': row['sex'],
-                    'age': row['age'],
-                    'height': row['height'],
-                    'weight': row['weight'],
-                    'date_of-scan': row['date_of_scan'], 
-                    'pathology': row['pathology']
-                }
+                if patient_id not in patients_dict:
+                    patients_dict[patient_id] = {
+                        'sex': row['sex'],
+                        'age': row['age'],
+                        'height': row['height'],
+                        'weight': row['weight'],
+                        'date_of_scan': row['date_of_scan'],
+                        'pathology': row['pathology']
+                    }
 
     # Fin du code
 
@@ -111,17 +112,12 @@ def update_convention(old_convention_dict):
     new_convention_dict = {}
 
     # TODO : Écrire votre code ici
-    for patient_id, patient_dict in old_convention_dict.items():
-        new_patient_dict = {}
-        for key, value in patient_dict.items():
-            if value =='n/a':
-                new_value = None
-            elif key == 'date_of_scan'and value != 'n/a':
-                new_value = value.replace('-', '/')
-            else:
-                new_value = value
-            new_patient_dict[key] = new_value
-        new_convention_dict[patient_id] = new_patient_dict
+    new_convention_dict = old_convention_dict
+    for id in new_convention_dict:
+        new_convention_dict[id]['date_of_scan'] = new_convention_dict[id]['date_of_scan'].replace('-', '/')
+        if new_convention_dict[id]['date_of_scan'] == "n/a":
+            new_convention_dict[id]['date_of_scan'] = None
+
     # Fin du code
 
     return new_convention_dict
@@ -188,47 +184,48 @@ def fetch_statistics(patients_dict):
     metrics = {'M':{}, 'F':{}}
 
     # TODO : Écrire votre code ici
-    #initialisation des listes
+
     males_age =[]
     males_height =[]
     males_weight = []
     females_age = []
     females_height = []
     females_weight = []
-    # Collleste des données par sexe
-    for patient_id in patients_dict: 
-        patient = patients_dict[patient_id]
+    
+    for dic_participant_id in patients_dict.values(): 
+        patient = dic_participant_id
         if patient['sex'] == 'M':
-            males_age.append(patients_dict['age'])
+            males_age.append(int(dic_participant_id['age']))
             if patient['height'] != 'n/a':
-                males_height.append(patients_dict['height'])
+                males_height.append(round(float(dic_participant_id['height']), 2))
                 if patient['weight'] != 'n/a':
-                    males_weight.append(patients_dict['weight'])
+                    males_weight.append(round(float(dic_participant_id['weight']), 2))
         else: 
-            females_age.append(patients_dict['age'])
+            females_age.append(int(dic_participant_id['age']))
             if patient['height'] != 'n/a':
-                females_height.append(patients_dict['height'])
+                females_height.append(round(float(dic_participant_id['height']), 2))
                 if patient['weight'] != 'n/a':
-                    females_weight.append(patients_dict['weight'])
-    # Calcul des moyennes et écart-types pour les hommes
-    metrics['M']['age'] = {'mean': sum(males_age)/len(males_age),
-                            'std': (sum([(x - sum(males_age)/len(males_age))**2 for x in males_age])/len(males_age))**0.5} 
+                    females_weight.append(round(float(dic_participant_id['weight']), 2))
+    # Moyennes et écart-types pour les hommes
+    metrics['M']['age'] = {'mean': round(sum(males_age)/len(males_age), 2),
+                            'std': round((sum([(x - sum(males_age)/len(males_age))**2 for x in males_age])/len(males_age))**0.5, 2)} 
     
-    metrics['M']['height'] = {'mean': sum(males_height)/len(males_height),
-                            'std': (sum([(x - sum(males_height)/len(males_height))**2 for x in males_height])/len(males_height))**0.5} 
+    metrics['M']['height'] = {'mean': round(sum(males_height)/len(males_height), 2),
+                            'std': round((sum([(x - sum(males_height)/len(males_height))**2 for x in males_height])/len(males_height))**0.5, 2)} 
     
-    metrics['M']['weight'] = {'mean': sum(males_weight)/len(males_weight),
-                            'std': (sum([(x - sum(males_weight)/len(males_weight))**2 for x in males_weight])/len(males_weight))**0.5} 
+    metrics['M']['weight'] = {'mean': round(sum(males_weight)/len(males_weight), 2),
+                            'std': round((sum([(x - sum(males_weight)/len(males_weight))**2 for x in males_weight])/len(males_weight))**0.5, 2)} 
     
-    # Calcul des moyennes et écart-types pour les femmes
-    metrics['F']['age'] = {'mean': sum(females_age)/len(females_age),
-                            'std': (sum([(x - sum(females_age)/len(females_age))**2 for x in females_age])/len(females_age))**0.5} 
+    # Moyennes et écart-types pour les femmes
+    metrics['F']['age'] = {'mean': round(sum(females_age)/len(females_age), 2),
+                            'std': round((sum([(x - sum(females_age)/len(females_age))**2 for x in females_age])/len(females_age))**0.5, 2)} 
     
-    metrics['F']['height'] = {'mean': sum(females_height)/len(females_height),
-                            'std': (sum([(x - sum(females_height)/len(females_height))**2 for x in females_height])/len(females_height))**0.5} 
+    metrics['F']['height'] = {'mean': round(sum(females_height)/len(females_height), 2),
+                            'std': round((sum([(x - sum(females_height)/len(females_height))**2 for x in females_height])/len(females_height))**0.5, 2)} 
     
-    metrics['F']['weight'] = {'mean': sum(females_weight)/len(females_weight),
-                            'std': (sum([(x - sum(females_weight)/len(females_weight))**2 for x in females_weight])/len(females_weight))**0.5}        
+    metrics['F']['weight'] = {'mean': round(sum(females_weight)/len(females_weight), 2),
+                            'std': round((sum([(x - sum(females_weight)/len(females_weight))**2 for x in females_weight])/len(females_weight))**0.5, 2)}        
+    
     # Fin du code
 
     return metrics
@@ -254,8 +251,25 @@ def create_csv(metrics):
     """
     paths_list = []
 
-    # TODO : Écrire votre code ici
+    f_metrics_path = "F_metrics.csv"
+    m_metrics_path = "M_metrics.csv"
 
+    # Hommes
+    with open(m_metrics_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['stats', 'age', 'height', 'weight'])
+        writer.writerow(['mean', round(metrics['M']['age']['mean'], 2), round(metrics['M']['height']['mean'], 2), round(metrics['M']['weight']['mean'], 2)])
+        writer.writerow(['std', round(metrics['M']['age']['std'], 2), round(metrics['M']['height']['std'], 2), round(metrics['M']['weight']['std'], 2)])
+
+    # Femmes
+    with open(f_metrics_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['stats', 'age', 'height', 'weight'])
+        writer.writerow(['mean', round(metrics['F']['age']['mean'], 2), round(metrics['F']['height']['mean'], 2), round(metrics['F']['weight']['mean'], 2)])
+        writer.writerow(['std', round(metrics['F']['age']['std'], 2), round(metrics['F']['height']['std'], 2), round(metrics['F']['weight']['std'], 2)])
+    
+    paths_list.append(f_metrics_path)
+    paths_list.append(m_metrics_path)
 
     # Fin du code
 
@@ -291,7 +305,7 @@ if __name__ == '__main__':
     patients_dict_multi = load_multiple_csv(csv_path1=csv_path1, csv_path2=csv_path2)
 
     # Affichage du résultat
-    print("Partie 2: \n\n", patients_dict['sub-tokyoIngenia04'], "\n")
+    print("Partie 2: \n\n", patients_dict, "\n")
 
     ######################
     # Tester la partie 3 #
@@ -301,7 +315,7 @@ if __name__ == '__main__':
     new_patients_dict = update_convention(patients_dict)
 
     # Affichage du résultat
-    print("Partie 3: \n\n", new_patients_dict['sub-tokyoIngenia04'], "\n")
+    print("Partie 3: \n\n", new_patients_dict, "\n")
 
     ######################
     # Tester la partie 4 #
